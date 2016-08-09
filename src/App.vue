@@ -3,8 +3,9 @@
     <h1>{{title}}</h1>
     <input type="text" v-model="newItem" @keyup.enter="addItem">
     <ul>
-      <li v-for="item in items" :class="{'isFinished':item.isFinished}" @click="toggleFinished(item)">
+      <li v-for="item in items" :class="{'isFinished':item.isFinished}">
         {{item.label}}
+        <span @click="deleteItem(item)" class="hander">&times;</span>
       </li>
     </ul>
   </div>
@@ -25,8 +26,15 @@ export default {
       alert(item.isFinished = !item.isFinished);
     },
     addItem: function(){
+      if(!this.newItem){
+        return;
+      }
       this.items.push({label:this.newItem,isFinished:false});
       this.newItem = "";
+    },
+    deleteItem: function(item){
+        this.items.splice(item,1);
+        console.log(this.items);
     }
   }
 }
@@ -36,6 +44,9 @@ export default {
 
 .isFinished{
   text-decoration: underline;
+}
+.hander{
+    cursor: pointer;
 }
 html {
   height: 100%;
