@@ -3,27 +3,38 @@
     <h1>{{title}}</h1>
     <input type="text" v-model="newItem" @keyup.enter="addItem">
     <ul>
-      <li v-for="item in items" :class="{'isFinished':item.isFinished}">
-        {{item.label}}
-        <span @click="deleteItem(item)" class="hander">&times;</span>
+      <li v-for="item in items" :class="{'isFinished':item.isFinished}" @click="toggleFinished(item)">
+        <span title="click it change stage">{{item.label}}</span>
+        <span @click="deleteItem(item)" class="hander" title="delete item">&times;</span>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import Store from './store'
 
 export default {
   data () {
       return {
         title: "this is a new todo list a <span>demo</span>",
-        items: [],
+        items: Store.fetch(),
         newItem: ""
       }
   },
+  watch: {
+    items: {
+      handler: function(val, oldVal){
+        console.log(val, oldVal);
+        Store.store(val);
+      },
+      deep:true
+    }
+  },
   methods: {
     toggleFinished: function(item){
-      alert(item.isFinished = !item.isFinished);
+      console.log(213);
+      item.isFinished = !item.isFinished;
     },
     addItem: function(){
       if(!this.newItem){
